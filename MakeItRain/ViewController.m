@@ -1,5 +1,7 @@
 //#import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVAudioPlayer.h>
+#import <Venmo/Venmo.h>
+#include <stdlib.h>
 #import "ViewController.h"
 
 @interface ViewController ()
@@ -7,13 +9,16 @@
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeDownGestureRecognizer;
 @property (strong, nonatomic) UIButton *countButton;
 @property (nonatomic) NSInteger swipeCount;
-@property (copy, nonatomic) NSMutableArray *rainAudioPlayers;
+@property (strong, nonatomic) NSMutableArray *rainAudioPlayers;
+@property (strong, nonatomic) UISlider *valueSlider;
+@property (strong, nonatomic) UILabel *sliderLabel;
+
 - (void)handleSwipeUp:(UISwipeGestureRecognizer *)gestureRecognizer;
 - (void)handleSwipeDown:(UISwipeGestureRecognizer *)gestureRecognizer;
 - (void)incrementCount;
 - (void)decrementCount;
-- (void)resetCount;
 - (void)playSound;
+- (void)makePayment;
 @end
 
 @implementation ViewController
@@ -22,7 +27,10 @@
 @synthesize swipeDownGestureRecognizer;
 @synthesize countButton;
 @synthesize swipeCount;
+@synthesize venmoClient;
 @synthesize rainAudioPlayers;
+@synthesize valueSlider;
+@synthesize sliderLabel;
 
 - (void)viewDidUnload
 {
@@ -34,6 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor lightGrayColor];
     
     self.swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] init];
     swipeUpGestureRecognizer.direction = UISwipeGestureRecognizerDirectionUp;
@@ -48,7 +57,7 @@
     swipeCount = 0;
     
     self.countButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    countButton.frame = CGRectMake(10, 10, 120, 30);
+    countButton.frame = CGRectMake(10, 10, 130, 30);
     [self.view addSubview:countButton];
     countButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
     [self updateLabel];
@@ -59,19 +68,45 @@
     NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"woosh" ofType:@"wav"];
     NSURL *fileURL = [[NSURL alloc] initFileURLWithPath: soundFilePath];
     
-    rainAudioPlayers = [NSMutableArray arrayWithCapacity:10];
+    self.rainAudioPlayers = [NSMutableArray arrayWithCapacity:10];
     for (int i=0; i<10; i++) {
         [rainAudioPlayers addObject:[[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil]];
     }
     
-//    UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    loginButton.frame = CGRectMake(230, 10, 80, 30);
-//    [self.view addSubview:loginButton];
-//    [loginButton setTitle:@"Login" forState:UIControlStateNormal];
+    self.venmoClient = [VenmoClient clientWithAppId:@"1135"
+                                             secret:@"NNZ3v8DvZ7LACaPRsbaCTdzB2ss3TFqN"];
+    
+    valueSlider = [[UISlider alloc] initWithFrame:CGRectMake(10, 360, 300, 20)];
+    valueSlider.minimumValue = 1;
+    valueSlider.maximumValue = 10;
+    valueSlider.continuous = NO;
+    valueSlider.value = 1;
+    [valueSlider addTarget:self action:@selector(sliderChange:)
+          forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:valueSlider];
+    
+    sliderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 385, 320, 20)];
+    sliderLabel.textAlignment = UITextAlignmentCenter;
+    sliderLabel.backgroundColor = [UIColor clearColor];
+    sliderLabel.text = @"Rain Amount $1";
+    [self.view addSubview:sliderLabel];
+    
+    UIButton *payButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    payButton.frame = CGRectMake(260, 10, 50, 30);
+    [self.view addSubview:payButton];
+    [payButton setTitle:@"Rain" forState:UIControlStateNormal];
+    [payButton addTarget:self action:@selector(makePayment)
+        forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)sliderChange:(UISlider *)sender {
+    sender.value = roundl(sender.value);
+    sliderLabel.text = [NSString stringWithFormat:@"Rain Amount $%i",
+                        [[NSNumber numberWithFloat:sender.value] integerValue]];
 }
 
 - (void)incrementCount {
-    swipeCount++;
+    swipeCount += valueSlider.value;
     [self updateLabel];
     
     if (swipeCount % 25 == 0) {
@@ -92,7 +127,9 @@
 
 - (void)decrementCount {
     if (swipeCount > 0) {
-        swipeCount--;
+        swipeCount -= valueSlider.value;
+    } else if (swipeCount < 1) {
+        swipeCount = 0;
     }
     [self updateLabel];
 }
@@ -134,10 +171,11 @@
     imageView.alpha = 1;
     [self.view addSubview:imageView];
     
+    CGFloat rotationAngle = arc4random_uniform(2) == 0 ? 3.13 : -3.13;
     [UIView animateWithDuration:1 animations:^{
         imageView.alpha = .5;
         imageView.frame = CGRectMake(144, 10, 33, 12);
-        imageView.transform = CGAffineTransformMakeRotation(3.13);
+        imageView.transform = CGAffineTransformMakeRotation(rotationAngle);
     } completion:^(BOOL finished) {
         [imageView removeFromSuperview];
         [self incrementCount];
@@ -164,6 +202,19 @@
         [imageView removeFromSuperview];
         [self decrementCount];
     }];
+}
+
+- (void)makePayment {
+    if (swipeCount > 0) {
+        VenmoTransaction *venmoTransaction = [[VenmoTransaction alloc] init];
+        venmoTransaction.type = VenmoTransactionTypePay;
+        venmoTransaction.amount = [[NSNumber numberWithInt:swipeCount] floatValue];
+        venmoTransaction.note = @"because I make it rain foo'!!";
+        VenmoViewController *viewController = [venmoClient viewControllerWithTransaction:venmoTransaction];
+        if (viewController) {
+            [self presentModalViewController:viewController animated:YES];
+        }
+    }
 }
 
 @end
