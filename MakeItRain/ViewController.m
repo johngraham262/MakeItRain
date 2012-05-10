@@ -1,10 +1,10 @@
 //#import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVAudioPlayer.h>
-#import <Venmo/Venmo.h>
 #include <stdlib.h>
 #import "ViewController.h"
 
 @interface ViewController ()
+
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeUpGestureRecognizer;
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeDownGestureRecognizer;
 @property (strong, nonatomic) UIButton *countButton;
@@ -12,6 +12,7 @@
 @property (strong, nonatomic) NSMutableArray *rainAudioPlayers;
 @property (strong, nonatomic) UISlider *valueSlider;
 @property (strong, nonatomic) UILabel *sliderLabel;
+@property (strong, nonatomic) UIButton *payButton;
 
 - (void)handleSwipeUp:(UISwipeGestureRecognizer *)gestureRecognizer;
 - (void)handleSwipeDown:(UISwipeGestureRecognizer *)gestureRecognizer;
@@ -19,6 +20,7 @@
 - (void)decrementCount;
 - (void)playSound;
 - (void)makePayment;
+
 @end
 
 @implementation ViewController
@@ -31,6 +33,9 @@
 @synthesize rainAudioPlayers;
 @synthesize valueSlider;
 @synthesize sliderLabel;
+@synthesize payButton;
+
+#pragma mark - UIViewController
 
 - (void)viewDidUnload
 {
@@ -43,7 +48,11 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor lightGrayColor];
+    swipeCount = 0;
+    self.venmoClient = [VenmoClient clientWithAppId:@"1135"
+                                             secret:@"NNZ3v8DvZ7LACaPRsbaCTdzB2ss3TFqN"];
     
+    // Add gesture recognizers.
     self.swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] init];
     swipeUpGestureRecognizer.direction = UISwipeGestureRecognizerDirectionUp;
     [swipeUpGestureRecognizer addTarget:self action:@selector(handleSwipeUp:)];
@@ -54,17 +63,26 @@
     [swipeDownGestureRecognizer addTarget:self action:@selector(handleSwipeDown:)];
     [self.view addGestureRecognizer:swipeDownGestureRecognizer];
     
-    swipeCount = 0;
+    // Connect to the pay button.
+    payButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    payButton.frame = CGRectMake(260, 10, 50, 30);
+    [self.view addSubview:payButton];
+    [payButton setTitle:@"Rain" forState:UIControlStateNormal];
+    [payButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+    [payButton addTarget:self action:@selector(makePayment)
+        forControlEvents:UIControlEventTouchUpInside];
     
+    // Set up the count button.
     self.countButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     countButton.frame = CGRectMake(10, 10, 130, 30);
     [self.view addSubview:countButton];
     countButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [self updateLabel];
+    [self updateLabelAndPayButton];
     [countButton addTarget:self action:@selector(resetCount)
           forControlEvents:UIControlEventTouchUpInside];
     [countButton setTitle:@"Reset" forState:UIControlStateHighlighted];
     
+    // Audio playing.
     NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"woosh" ofType:@"wav"];
     NSURL *fileURL = [[NSURL alloc] initFileURLWithPath: soundFilePath];
     
@@ -73,9 +91,7 @@
         [rainAudioPlayers addObject:[[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil]];
     }
     
-    self.venmoClient = [VenmoClient clientWithAppId:@"1135"
-                                             secret:@"NNZ3v8DvZ7LACaPRsbaCTdzB2ss3TFqN"];
-    
+    // Set up the slider, increments by 1 from 1-10.
     valueSlider = [[UISlider alloc] initWithFrame:CGRectMake(10, 360, 300, 20)];
     valueSlider.minimumValue = 1;
     valueSlider.maximumValue = 10;
@@ -90,14 +106,16 @@
     sliderLabel.backgroundColor = [UIColor clearColor];
     sliderLabel.text = @"Rain Amount $1";
     [self.view addSubview:sliderLabel];
-    
-    UIButton *payButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    payButton.frame = CGRectMake(260, 10, 50, 30);
-    [self.view addSubview:payButton];
-    [payButton setTitle:@"Rain" forState:UIControlStateNormal];
-    [payButton addTarget:self action:@selector(makePayment)
-        forControlEvents:UIControlEventTouchUpInside];
 }
+
+#pragma mark - Public
+
+- (void)resetCount {
+    swipeCount = 0;
+    [self updateLabelAndPayButton];
+}
+
+#pragma mark - Private
 
 - (void)sliderChange:(UISlider *)sender {
     sender.value = roundl(sender.value);
@@ -107,7 +125,7 @@
 
 - (void)incrementCount {
     swipeCount += valueSlider.value;
-    [self updateLabel];
+    [self updateLabelAndPayButton];
     
     if (swipeCount % 25 == 0) {
         UIImageView *ballaImage = [[UIImageView alloc] initWithImage:
@@ -116,7 +134,7 @@
         ballaImage.alpha = .5;
         [self.view addSubview:ballaImage];
         
-        [UIView animateWithDuration:.5 animations:^{
+        [UIView animateWithDuration:.7 animations:^{
             ballaImage.frame = CGRectMake(0, 50, 320, 320);
             ballaImage.alpha = 1;
         } completion:^(BOOL finished) {
@@ -131,17 +149,13 @@
     } else if (swipeCount < 1) {
         swipeCount = 0;
     }
-    [self updateLabel];
+    [self updateLabelAndPayButton];
 }
 
-- (void)resetCount {
-    swipeCount = 0;
-    [self updateLabel];
-}
-
-- (void)updateLabel {
+- (void)updateLabelAndPayButton {
     [countButton setTitle:[NSString stringWithFormat:@"Droplets: $%i", swipeCount]
                  forState:UIControlStateNormal];
+    payButton.enabled = (swipeCount > 0);
 }
 
 - (void)playSound {
@@ -155,14 +169,7 @@
 
 - (void)handleSwipeUp:(UISwipeGestureRecognizer *)gestureRecognizer {
     CGPoint start = [gestureRecognizer locationOfTouch:0 inView:self.view];
-    
-//    CFBundleRef mainBundle = CFBundleGetMainBundle();
-//    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainBundle, CFSTR("woosh"), CFSTR("wav"), NULL);
-//    SystemSoundID soundId;
-//    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundId);
-//    AudioServicesPlaySystemSound(soundId);
-//    CFRelease(soundFileURLRef);
-    
+        
     [self playSound];
     
     UIImageView *imageView = [[UIImageView alloc]

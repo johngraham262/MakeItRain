@@ -29,21 +29,20 @@
             openURL:url 
             completionHandler:^(VenmoTransaction *transaction, NSError *error) {
                 if (transaction) {
-//                    NSString *success = (transaction.success ? @"Success" : @"Failure");
-//                    NSString *title = [@"Transaction " stringByAppendingString:success];
-                    NSString *message = [@"payment_id: " stringByAppendingFormat:@"%i. %i %@ %@ (%i) $%@ %@",
-                                         transaction.id,
-                                         transaction.fromUserId,
-                                         transaction.typeStringPast,
-                                         transaction.toUserHandle,
-                                         transaction.toUserId,
-                                         transaction.amountString,
-                                         transaction.note];
-                    NSLog(@"message: %@", message);
+//                    NSString *message = [@"payment_id: " stringByAppendingFormat:@"%i. %i %@ %@ (%i) $%@ %@",
+//                                         transaction.id,
+//                                         transaction.fromUserId,
+//                                         transaction.typeStringPast,
+//                                         transaction.toUserHandle,
+//                                         transaction.toUserId,
+//                                         transaction.amountString,
+//                                         transaction.note];
+//                    NSLog(@"message: %@", message);
                     
                     if (transaction.success) {
                         [viewController resetCount];
                         
+                        // TODO: Improve message when SDK sends more information.
 //                        NSString *format = @"You just rained $%@ all ova %@!";
                         NSString *format = @"You just rained $%@ all up in herrr!";
                         NSString *message = [NSString stringWithFormat:format,
