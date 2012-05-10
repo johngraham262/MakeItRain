@@ -27,6 +27,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		9C1852CE155C1EF800094791 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9C1852C3155C1EF700094791 /* Venmo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C9BD6C6A13EEE06400F4D8F4;
+			remoteInfo = Venmo;
+		};
+		9C1852D0155C1EF800094791 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9C1852C3155C1EF700094791 /* Venmo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C9550E7613F5C48900212008;
+			remoteInfo = VenmoApp;
+		};
+		9C1852D2155C1EF800094791 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9C1852C3155C1EF700094791 /* Venmo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C9BD6C7A13EEE06400F4D8F4;
+			remoteInfo = VenmoSpecs;
+		};
 		9CEF8607155BAFCA00897D94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9CEF85D8155BAFCA00897D94 /* Project object */;
@@ -37,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C1852C3155C1EF700094791 /* Venmo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Venmo.xcodeproj; path = Venmo/Venmo.xcodeproj; sourceTree = "<group>"; };
 		9CEF85E1155BAFCA00897D94 /* MakeItRain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MakeItRain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CEF85E5155BAFCA00897D94 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9CEF85E7155BAFCA00897D94 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -87,6 +109,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C185257155C1E4700094791 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				9C1852C3155C1EF700094791 /* Venmo.xcodeproj */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		9C1852C4155C1EF700094791 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9C1852CF155C1EF800094791 /* libVenmo.a */,
+				9C1852D1155C1EF800094791 /* VenmoApp.app */,
+				9C1852D3155C1EF800094791 /* VenmoSpecs.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		9CEF85D6155BAFCA00897D94 = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +150,7 @@
 		9CEF85E4155BAFCA00897D94 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9C185257155C1E4700094791 /* Libraries */,
 				9CEF85E5155BAFCA00897D94 /* UIKit.framework */,
 				9CEF85E7155BAFCA00897D94 /* Foundation.framework */,
 				9CEF85E9155BAFCA00897D94 /* CoreGraphics.framework */,
@@ -221,6 +262,12 @@
 			mainGroup = 9CEF85D6155BAFCA00897D94;
 			productRefGroup = 9CEF85E2155BAFCA00897D94 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 9C1852C4155C1EF700094791 /* Products */;
+					ProjectRef = 9C1852C3155C1EF700094791 /* Venmo.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				9CEF85E0155BAFCA00897D94 /* MakeItRain */,
@@ -228,6 +275,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		9C1852CF155C1EF800094791 /* libVenmo.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libVenmo.a;
+			remoteRef = 9C1852CE155C1EF800094791 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9C1852D1155C1EF800094791 /* VenmoApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = VenmoApp.app;
+			remoteRef = 9C1852D0155C1EF800094791 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9C1852D3155C1EF800094791 /* VenmoSpecs.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = VenmoSpecs.octest;
+			remoteRef = 9C1852D2155C1EF800094791 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9CEF85DF155BAFCA00897D94 /* Resources */ = {
@@ -445,6 +516,7 @@
 				9CEF8616155BAFCA00897D94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9CEF8617155BAFCA00897D94 /* Build configuration list for PBXNativeTarget "MakeItRainTests" */ = {
 			isa = XCConfigurationList;
@@ -453,6 +525,7 @@
 				9CEF8619155BAFCA00897D94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
