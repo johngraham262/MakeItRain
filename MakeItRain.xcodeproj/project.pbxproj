@@ -21,6 +21,9 @@
 		9CEF860E155BAFCA00897D94 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9CEF860C155BAFCA00897D94 /* InfoPlist.strings */; };
 		9CEF8611155BAFCA00897D94 /* MakeItRainTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CEF8610155BAFCA00897D94 /* MakeItRainTests.m */; };
 		9CEF861B155BB12200897D94 /* dollarBill.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9CEF861A155BB12200897D94 /* dollarBill.jpg */; };
+		9CEF861D155C0D5000897D94 /* ballaImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEF861C155C0D5000897D94 /* ballaImage.png */; };
+		9CEF861F155C140600897D94 /* woosh.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9CEF861E155C140600897D94 /* woosh.wav */; };
+		9CEF8625155C1A1100897D94 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CEF8624155C1A1100897D94 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +57,9 @@
 		9CEF860F155BAFCA00897D94 /* MakeItRainTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MakeItRainTests.h; sourceTree = "<group>"; };
 		9CEF8610155BAFCA00897D94 /* MakeItRainTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MakeItRainTests.m; sourceTree = "<group>"; };
 		9CEF861A155BB12200897D94 /* dollarBill.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dollarBill.jpg; sourceTree = "<group>"; };
+		9CEF861C155C0D5000897D94 /* ballaImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ballaImage.png; sourceTree = "<group>"; };
+		9CEF861E155C140600897D94 /* woosh.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = woosh.wav; sourceTree = "<group>"; };
+		9CEF8624155C1A1100897D94 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CEF8625155C1A1100897D94 /* AVFoundation.framework in Frameworks */,
 				9CEF85E6155BAFCA00897D94 /* UIKit.framework in Frameworks */,
 				9CEF85E8155BAFCA00897D94 /* Foundation.framework in Frameworks */,
 				9CEF85EA155BAFCA00897D94 /* CoreGraphics.framework in Frameworks */,
@@ -83,6 +90,7 @@
 		9CEF85D6155BAFCA00897D94 = {
 			isa = PBXGroup;
 			children = (
+				9CEF8624155C1A1100897D94 /* AVFoundation.framework */,
 				9CEF85EB155BAFCA00897D94 /* MakeItRain */,
 				9CEF8609155BAFCA00897D94 /* MakeItRainTests */,
 				9CEF85E4155BAFCA00897D94 /* Frameworks */,
@@ -127,6 +135,8 @@
 			isa = PBXGroup;
 			children = (
 				9CEF861A155BB12200897D94 /* dollarBill.jpg */,
+				9CEF861C155C0D5000897D94 /* ballaImage.png */,
+				9CEF861E155C140600897D94 /* woosh.wav */,
 				9CEF85ED155BAFCA00897D94 /* MakeItRain-Info.plist */,
 				9CEF85EE155BAFCA00897D94 /* InfoPlist.strings */,
 				9CEF85F1155BAFCA00897D94 /* main.m */,
@@ -227,6 +237,8 @@
 				9CEF85F0155BAFCA00897D94 /* InfoPlist.strings in Resources */,
 				9CEF85FC155BAFCA00897D94 /* ViewController.xib in Resources */,
 				9CEF861B155BB12200897D94 /* dollarBill.jpg in Resources */,
+				9CEF861D155C0D5000897D94 /* ballaImage.png in Resources */,
+				9CEF861F155C140600897D94 /* woosh.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
